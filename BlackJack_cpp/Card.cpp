@@ -75,7 +75,7 @@ std::string Card::GetCard()
 		break;
 	}
 
-	return card_name;
+	return card_name + " (" + std::to_string(GetCardValue()) + ')';
 }
 
 int Card::GetCardValue()

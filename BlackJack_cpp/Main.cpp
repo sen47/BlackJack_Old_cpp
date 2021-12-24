@@ -16,11 +16,11 @@ int main()
 
 	if (blackJack.Play())
 	{
-		std::cout << "\nCongratulations, you win!\n";
+		std::cout << "\n\nCongratulations, you win!\n";
 	}
 	else
 	{
-		std::cout << "\nYou lose, Jonah!\n";
+		std::cout << "\n\nYou lose, Jonah!\n";
 	}
 
 	return 0;

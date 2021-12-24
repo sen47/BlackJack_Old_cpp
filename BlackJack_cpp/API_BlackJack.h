@@ -2,6 +2,8 @@
 #include"CardDeck.h"
 #include"Check.h"
 #include<vector>
+#include<thread>
+#include<chrono>
 
 enum Action
 {
@@ -10,7 +12,7 @@ enum Action
 
 enum WhoMove
 {
-	PlayerMove, DeallerMove
+	PlayerMove = 1, DeallerMove
 };
 
 class API_BlackJack
@@ -22,9 +24,7 @@ public:
 
 private:
 	CardDeck deck;
-
-	void printCards(const std::vector<Card*>cards, const WhoMove currentMove);
-	std::string WhoNowMove(const WhoMove currentMove);
+	std::string getWhoMove(const WhoMove currentMove);
 
 	class Player
 	{

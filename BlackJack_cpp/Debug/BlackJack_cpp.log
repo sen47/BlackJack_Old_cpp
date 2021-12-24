@@ -1,5 +1,3 @@
 ﻿  API_BlackJack.cpp
-  Main.cpp
-  Создание кода...
-API_BlackJack.obj : error LNK2019: ссылка на неразрешенный внешний символ "private: void __thiscall API_BlackJack::cardTo(class std::vector<class Card *,class std::allocator<class Card *> >,class Card *,int &)" (?cardTo@API_BlackJack@@AAEXV?$vector@PAVCard@@V?$allocator@PAVCard@@@std@@@std@@PAVCard@@AAH@Z) в функции "public: bool __thiscall API_BlackJack::Play(void)" (?Play@API_BlackJack@@QAE_NXZ)
-C:\Projects VS\BlackJack_cpp\Debug\BlackJack_cpp.exe : fatal error LNK1120: неразрешенных внешних элементов: 1
+C:\Projects VS\BlackJack_cpp\BlackJack_cpp\API_BlackJack.cpp(13): warning C4715: API_BlackJack::getWhoMove: значение возвращается не при всех путях выполнения
+  BlackJack_cpp.vcxproj -> C:\Projects VS\BlackJack_cpp\Debug\BlackJack_cpp.exe

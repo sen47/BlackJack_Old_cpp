@@ -1,13 +1,13 @@
 #include "API_BlackJack.h"
 /////////////////////////////////////////////////
 //private
-std::string API_BlackJack::WhoNowMove(const WhoMove currentMove)
+std::string API_BlackJack::getWhoMove(const WhoMove currentMove)
 {
-	switch
+	switch(currentMove)
 	{
-	case Player:
+	case PlayerMove:
 		return "Player";
-	case Dealler:
+	case DeallerMove:
 		return "Dealler";
 	}
 }
@@ -17,10 +17,11 @@ std::string API_BlackJack::WhoNowMove(const WhoMove currentMove)
 API_BlackJack::Player::Player()
 	:m_score{ 0 } {};
 
-void API_BlackJack::Player::addCard(Card* const card)
+void API_BlackJack::Player::addCard(Card* card)
 {
 	m_cards.emplace_back(card);
 	m_score += card->GetCardValue();
+	++card;
 }
 
 Card& API_BlackJack::Player::operator[](const int index)
@@ -31,7 +32,7 @@ Card& API_BlackJack::Player::operator[](const int index)
 void API_BlackJack::Player::printCard()
 {
 	for (Card* el : m_cards)
-		std::cout << '\n' << el->GetCard() << " (" << el->GetCardValue() << ')';
+		std::cout << '\n' << el->GetCard();
 	std::cout << "\nScore is " << m_score;
 }
 
@@ -50,7 +51,10 @@ int API_BlackJack::PlayerAnswer()
 		if (answer >= Exit && answer < MaxAction)
 			return answer;
 		else
+		{
 			std::cout << "\nUnvaliable value, try again";
+		}
+			
 	}
 }
 
@@ -74,55 +78,44 @@ bool API_BlackJack::Play()
 	int player_answer;
 	do
 	{
-		switch (currentMove)
+		std::cout << "Dialler have " << dealer[0].GetCard() << ", and one unknown.";
+		std::cout << "\n\n" << getWhoMove(currentMove) << "\'s card is: ";
+		player.printCard();
+		if (player.m_score > 21)
+			return false;
+		if (player.m_score == 21)
 		{
-		case PlayerMove:
-			std::cout << "Dialler have " << dealer[0].GetCard() << ", and one unknown.";
-			player.printCard();
-			if (player.m_score > 21)
-				return false;
-			player_answer = PlayerAnswer();
-			if (player_answer == Hit)
-			{
-				player.addCard(ptr_currentCard);
-				system("cls");
-			}
-		case DeallerMove:
-
+			currentMove = DeallerMove;
+			system("cls");
+			break;
 		}
-		
-		std::cout << "\nDialeer card is:\n";
-		for (Card* el : cards_dialler)
-			std::cout << el->GetCard() << '\n';
-		std::cout << "Score is " << score_dealler << std::endl;
-
-		if (score_dealler > 21) return true;
-		if (score_dealler >= 17) break;
-
-		cards_dialler.emplace_back(ptr_currentCard);
-		score_dealler += ptr_currentCard->GetCardValue();
-		++ptr_currentCard;
-		
-
-		
-
-		
-		
-		////Quick exit
-		//if (player_answer == static_cast<int>(Exit));
-		//{
-		//	std::cout << "\nBye, bye chicken!";
-		//	std::exit(0);
-		//}
-
-		
-
-	} while (currentMove == Player);
-
-	while (true)
+		player_answer = PlayerAnswer();
+		switch (player_answer)
+		{
+		case Hit:
+			player.addCard(ptr_currentCard);
+			system("cls");
+			break;
+		case Stand:
+			currentMove = DeallerMove;
+			system("cls");
+			break;
+		}
+	} while (player_answer == PlayerMove);
+	
+	std::cout << getWhoMove(PlayerMove) << "\'s card is: ";
+	player.printCard();
+	std::cout << "\n\n" << getWhoMove(currentMove) << "\'s card is: ";
+	dealer.printCard();
+	
+	while (dealer.m_score < 17)
 	{
-		
+		std::cout << "\n\nDealer take card ";
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+		std::cout << ptr_currentCard->GetCard();
+		dealer.addCard(ptr_currentCard);
+		std::cout << "\nScore is " << dealer.m_score;
 	}
-
-	return (21 - score_player) < (21 - score_dealler);
+	if (dealer.m_score > 21)return true;
+	return (21 - player.m_score) <= (21 - dealer.m_score);
 }
